@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    <title>eBird Participation in 2013</title>
+    <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico'/>
+  
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.js'></script>
+    <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.css' rel='stylesheet' />
+    <script src='./stories.geojson'></script>
+  
+    <style>
+
+        /*Main Stuff*/
+        body { 
+            margin:0;
+            padding:0;
+            font-family: 'Helvetica Neue', Helvetica, sans-serif;
+        }
+        #map { 
+            position:absolute; 
+            top:0; 
+            bottom:0; 
+            width:100%;
+        }
+
+        /*Move Leaflet Zoom Control to Custom Position*/
+        .leaflet-top .leaflet-control {
+            top: 95px;
+            left: 295px;
+        }
+
+        /*Popup*/
+        h3.story { 
+            font-size: 125%;
+            color:#2b90bf;
+        }
+        p.story { 
+            font-size: 90%;
+            color:#303030;
+            line-height: 1.25em;
+        }
+
+        .header {
+            position: absolute;
+            top:10px;
+            left:10px;
+            background: rgba(40, 40, 40, 0.8);
+            padding-top: 10px;
+            padding-left:20px;
+            padding-right:20px;
+            border-radius:5px;
+            box-shadow: 0px 0px 5px #848484;
+            z-index: 5;
+        }
+        h1.title {
+            color:#09ea32;
+            font-size: 175%;
+            line-height: 0px;
+        }
+        p.title {
+            text-align: left;
+            font-size: 100%;
+            color:#e8e8e8;
+        }
+        a.title {
+            color:#09ea32;
+            text-decoration: none;
+        }
+
+        /*Map Information*/
+        .infobox {
+            position: absolute;
+            top: 105px;
+            left: 10px;
+            width: 250px;
+            background: rgba(40, 40, 40, 0.8);
+            padding-left: 20px;
+            padding-right: 15px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            border-radius:5px;
+            box-shadow: 0px 0px 5px #848484;
+            z-index: 5;
+        }
+
+        h3.info {
+            line-height: 0.25em;
+            color: #49cbff;
+        }
+
+        p.info {
+            font-size: 75%;
+            color:#e8e8e8;
+        }
+
+        a.info {
+            text-decoration: none;
+            color: #49cbff;
+        }
+
+        /*Source Information*/
+        .sources {
+            position: absolute;
+            bottom:0px;
+            left:10px;
+            padding:0px;
+            font-size: 75%;
+            color: rgba(255,255,255,0.5);
+        }
+
+        a.source {
+            color:inherit;
+            text-decoration: none;
+        }
+
+        /*Stories Button*/        
+        #map-ui {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            z-index: 100;
+        }
+
+        #map-ui a {
+            font: normal 16px/25px 'Helvetica Neue', Helvetica, sans-serif;
+            text-align: center;
+            background: rgba(57, 160, 229, 0.8);
+            display: block;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #848484;
+            border-bottom-width: 0;
+            min-width: 140px;
+            padding: 10px;
+            text-decoration: none;
+            color: #FFF;
+        }
+
+        #map-ui a:hover {
+            background: rgb(57, 160, 229);
+            box-shadow: 0px 0px 5px #848484;
+        }
+
+        #map-ui li:first-child a {
+            -webkit-border-radius: 3px 3px 3px 3px;
+            border-radius: 3px 3px 3px 3px;
+        }
+
+        #map-ui a.active {
+            background: rgb(57, 160, 229);
+            color: #FFF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <ul id='map-ui'></ul>
+    <div id='map' class='dark'></div>
+
+    <!-- Header -->
+    <div class="header">
+        <h1 class="title"><a href="http://ebird.org/content/ebird/about/" class="title">eBird</a> Participation in 2013</h1>
+        <p class="title">
+          Citizen Science Aides Avian Research</p>
+    </div>
+
+    <div class="infobox">
+        <h3 class="info">
+            About the Map
+        </h3>
+        <p class="info">
+            <strong style="color:#49cbff;">What is eBird?</strong> In 2002, The Cornell Lab or Ornithology and National Audubon Society launched the eBird project – a real-time, online checklist to collect bird observations voluntarily submitted by the public. In it's first decade, eBird has revolutionized the way that the ornithological community reports and accesses information about birds.</br><em><a href="http://ebird.org/content/ebird/about/" class="info">Learn more...</a></em></p>
+        <p class="info">
+            <strong style="color:#49cbff;">What are the green dots?</strong> This map reveals each one of the 1.5 million bird lists submitted by bird-watchers across the contiguous United States in 2012. Each green dot below represents <strong>one list</strong> of bird sigtings submitted by a bird-watcher for a particular location and date. As the dots become denser, the color becomes brighter, so areas with the most lists submitted appear the brightest.</p>
+        <p class="info">
+            <strong style="color:#49cbff;">What are the stories?</strong> Bird watchers can submit comments with each list. These comments offer a glimpse into the stories behind the lists — the real people who volunteered their time to take a walk outside, experience nature, and share that experience with others for the sake of science. Click the "Show/Hide Stories" button (top right) to explore a few of those stories that I've chosen for this map.</p>
+    </div>
+
+    <div class="sources">
+        <p>Map designed by <a href="http://mtaylorlong.com" class="source">M. Taylor Long</a>.<br>
+        List data downloaded with permission from <a href="http://ebird.org/ebird/data/download" class="source">eBird</a> and mapped with <a href="http://www.esri.com/" class="source">esri ArcGIS for Desktop</a>.</br>
+        Tiles designed with <a href="https://www.mapbox.com/tilemill/" class="source">TileMill</a> and hosted by <a href="https://www.mapbox.com" class="source">MapBox</a> with street data from <a href="http://www.openstreetmap.org" class="source">Open Street Map</a>.</p>
+    </div>
+
+    <script>
+        // Initialize main map
+        var map = L.mapbox.map('map', 'mtaylorlong.gf08hon0', {
+            shareControl: true,
+            minZoom: 4,
+            maxZoom: 8,
+        })
+            .setView([38.72, -100.00], 5)
+            .addControl(L.mapbox.geocoderControl('mtaylorlong.i2pn95lc'));
+
+        // Set up Marker Layer Controls
+        var ui = document.getElementById('map-ui');
+        var markerLayer = L.mapbox.markerLayer(geojson);
+        addLayer(markerLayer, 'Show/Hide Stories', 1);
+
+        markerLayer.eachLayer(function(layer) {
+            var content = '<h3 class="story">' + layer.feature.properties.Name + '<\/h3>' +
+              '<p class="story"><strong>' + layer.feature.properties.Date + '</strong><\/p>' +
+              '<p class="story">' + layer.feature.properties.Comments + '<\/p>';
+            layer.bindPopup(content);
+        });
+
+        function addLayer(layer, name, zIndex) {
+            layer
+                .setZIndex(zIndex)
+
+            // Create a simple layer switcher that toggles layers on and off.
+            var item = document.createElement('li');
+            var link = document.createElement('a');
+
+            link.href = '#';
+            link.className = '';
+            link.innerHTML = name;
+
+            link.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (map.hasLayer(layer)) {
+                    map.removeLayer(layer);
+                    this.className = '';
+                } else {
+                    map.addLayer(layer);
+                    this.className = 'active';
+                }
+            };
+
+            item.appendChild(link);
+            ui.appendChild(item);
+        }
+
+    </script>
+</body>
+</html>
