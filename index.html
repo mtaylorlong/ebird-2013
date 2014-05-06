@@ -7,8 +7,9 @@
     <link rel='shortcut icon' type='image/x-icon' href='./favicon.ico'/>
   
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
-    <script src='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.js'></script>
-    <link href='//api.tiles.mapbox.com/mapbox.js/v1.5.1/mapbox.css' rel='stylesheet' />
+    <script src='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.2/mapbox.css' rel='stylesheet' />
+    <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-hash/v0.2.1/leaflet-hash.js'></script>
     <script src='./stories.geojson'></script>
   
     <style>
@@ -24,6 +25,7 @@
             top:0; 
             bottom:0; 
             width:100%;
+            background: #000;
         }
 
         /*Move Leaflet Zoom Control to Custom Position*/
@@ -177,69 +179,29 @@
             About the Map
         </h3>
         <p class="info">
-            <strong style="color:#49cbff;">What is eBird?</strong> In 2002, The Cornell Lab or Ornithology and National Audubon Society launched the eBird project – a real-time, online checklist to collect bird observations voluntarily submitted by the public. In it's first decade, eBird has revolutionized the way that the ornithological community reports and accesses information about birds.</br><em><a href="http://ebird.org/content/ebird/about/" class="info">Learn more...</a></em></p>
+            <strong style="color:#49cbff;">What is eBird?</strong> In 2002, The Cornell Lab or Ornithology and National Audubon Society launched the eBird project – a real-time, online checklist to collect bird observations voluntarily submitted by the public. In its first decade, eBird has revolutionized the way that the ornithological community reports and accesses information about birds.</br><em><a href="http://ebird.org/content/ebird/about/" class="info">Learn more...</a></em></p>
         <p class="info">
-            <strong style="color:#49cbff;">What are the green dots?</strong> This map reveals each one of the 1.5 million bird lists submitted by bird-watchers across the contiguous United States in 2012. Each green dot below represents <strong>one list</strong> of bird sigtings submitted by a bird-watcher for a particular location and date. As the dots become denser, the color becomes brighter, so areas with the most lists submitted appear the brightest.</p>
-        <p class="info">
-            <strong style="color:#49cbff;">What are the stories?</strong> Bird watchers can submit comments with each list. These comments offer a glimpse into the stories behind the lists — the real people who volunteered their time to take a walk outside, experience nature, and share that experience with others for the sake of science. Click the "Show/Hide Stories" button (top right) to explore a few of those stories that I've chosen for this map.</p>
+            <strong style="color:#49cbff;">What are the green dots?</strong> This map reveals each one of the 2.5 million bird lists submitted by bird-watchers across the world in 2013. Each green dot represents <strong>one list</strong> of bird sigtings submitted by a bird-watcher for a particular location and date. As the dots become denser, the color becomes brighter, so areas with the most lists submitted appear the brightest.</p>
     </div>
 
     <div class="sources">
         <p>Map designed by <a href="http://mtaylorlong.com" class="source">M. Taylor Long</a>.<br>
-        List data downloaded with permission from <a href="http://ebird.org/ebird/data/download" class="source">eBird</a> and mapped with <a href="http://www.esri.com/" class="source">esri ArcGIS for Desktop</a>.</br>
+        List data downloaded with permission from <a href="http://ebird.org/ebird/data/download" class="source">eBird</a> and mapped with <a href="http://postgis.net/" class="source">PostGIS</a>.</br>
         Tiles designed with <a href="https://www.mapbox.com/tilemill/" class="source">TileMill</a> and hosted by <a href="https://www.mapbox.com" class="source">MapBox</a> with street data from <a href="http://www.openstreetmap.org" class="source">Open Street Map</a>.</p>
     </div>
 
     <script>
         // Initialize main map
-        var map = L.mapbox.map('map', 'mtaylorlong.i2pn95lc', {
+        var map = L.mapbox.map('map', 'mtaylorlong.i3jo92aa', {
             shareControl: true,
-            minZoom: 0,
-            maxZoom: 4,
+            minZoom: 2,
+            maxZoom: 8,
         })
-            .setView([38.72, -100.00], 2)
-            .addControl(L.mapbox.geocoderControl('mtaylorlong.i2pn95lc'));
+            .setView([38.72, -100.00], 4)
+            .addControl(L.mapbox.geocoderControl('mtaylorlong.i3jo92aa'));
 
-        // Set up Marker Layer Controls
-        var ui = document.getElementById('map-ui');
-        var markerLayer = L.mapbox.markerLayer(geojson);
-        addLayer(markerLayer, 'Show/Hide Stories', 1);
-
-        markerLayer.eachLayer(function(layer) {
-            var content = '<h3 class="story">' + layer.feature.properties.Name + '<\/h3>' +
-              '<p class="story"><strong>' + layer.feature.properties.Date + '</strong><\/p>' +
-              '<p class="story">' + layer.feature.properties.Comments + '<\/p>';
-            layer.bindPopup(content);
-        });
-
-        function addLayer(layer, name, zIndex) {
-            layer
-                .setZIndex(zIndex)
-
-            // Create a simple layer switcher that toggles layers on and off.
-            var item = document.createElement('li');
-            var link = document.createElement('a');
-
-            link.href = '#';
-            link.className = '';
-            link.innerHTML = name;
-
-            link.onclick = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (map.hasLayer(layer)) {
-                    map.removeLayer(layer);
-                    this.className = '';
-                } else {
-                    map.addLayer(layer);
-                    this.className = 'active';
-                }
-            };
-
-            item.appendChild(link);
-            ui.appendChild(item);
-        }
+        // Adds hash URL functionality
+        var hash = L.hash(map);
 
     </script>
 </body>
